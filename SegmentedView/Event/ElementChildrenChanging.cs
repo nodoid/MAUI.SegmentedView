@@ -1,4 +1,6 @@
 ﻿using SegmentedView.Control;
+using System;
+using System.Collections.Generic;
 
 namespace SegmentedView.Event
 {

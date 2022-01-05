@@ -3,7 +3,10 @@ using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using Microsoft.Maui.Controls.Platform;
 using SegmentedView.Control;
 using SegmentedView.Platforms.iOS;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using UIKit;
 
 [assembly: ExportRenderer(typeof(SegmentedControl), typeof(SegmentedControlRenderer))]
 namespace SegmentedView.Platforms.iOS
@@ -11,7 +14,7 @@ namespace SegmentedView.Platforms.iOS
     [Preserve(AllMembers = true)]
     public class SegmentedControlRenderer : ViewRenderer<SegmentedControl, UISegmentedControl>
     {
-        private UISegmentedControl _nativeControl;
+        private UISegmentedControl? _nativeControl;
 
         protected override void OnElementChanged(ElementChangedEventArgs<SegmentedControl> e)
         {

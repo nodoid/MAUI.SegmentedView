@@ -1,4 +1,6 @@
-﻿namespace SegmentedView
+﻿using System;
+
+namespace SegmentedView
 {
     public sealed class PreserveAttribute : Attribute
     {

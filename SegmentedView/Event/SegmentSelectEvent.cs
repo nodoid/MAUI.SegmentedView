@@ -1,4 +1,6 @@
-﻿namespace SegmentedView.Event
+﻿using System;
+
+namespace SegmentedView.Event
 {
     [Preserve(AllMembers = true)]
     public class SegmentSelectEventArgs : EventArgs

@@ -1,8 +1,11 @@
 ﻿using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 using SegmentedView.Event;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using TypeConverterAttribute = System.ComponentModel.TypeConverterAttribute;
 
@@ -50,7 +53,7 @@ namespace SegmentedView.Control
         public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(SegmentedControl));
         public static readonly BindableProperty TextPropertyNameProperty = BindableProperty.Create(nameof(TextPropertyName), typeof(string), typeof(SegmentedControl));
 
-        private void OnItemsSourceChanged()
+        void OnItemsSourceChanged()
         {
             var itemsSource = ItemsSource;
             var items = itemsSource as IList;
@@ -83,7 +86,7 @@ namespace SegmentedView.Control
             }
         }
 
-        protected override void OnPropertyChanged(string propertyName = null)
+        protected override void OnPropertyChanged(string? propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
 
@@ -95,19 +98,20 @@ namespace SegmentedView.Control
                 OnSelectedSegmentChanged();
         }
 
-        private void OnSelectedSegmentChanged()
+        void OnSelectedSegmentChanged()
         {
             var segmentIndex = SelectedSegment;
             if (segmentIndex >= 0 && segmentIndex < Children.Count && SelectedItem != Children[segmentIndex].Item)
                 SelectedItem = Children[segmentIndex].Item;
         }
 
-        private void OnSelectedItemChanged(bool forceUpdateSelectedSegment = false)
+        void OnSelectedItemChanged(bool forceUpdateSelectedSegment = false)
         {
             if (TextPropertyName != null)
             {
-                var selectedItem = SelectedItem;
-                var selectedIndex = Children.IndexOf(item => item.Item == selectedItem);
+                object selectedItem = SelectedItem;
+                var i = Children.FirstOrDefault(x => x.Item == selectedItem);
+                int selectedIndex = i != null ? Children.IndexOf(i) : -1;
                 if (selectedIndex == -1)
                 {
                     selectedIndex = SelectedSegment;
@@ -199,7 +203,7 @@ namespace SegmentedView.Control
 
         public object SelectedItem
         {
-            get => (object)GetValue(SelectedItemProperty);
+            get => GetValue(SelectedItemProperty);
             set => SetValue(SelectedItemProperty, value);
         }
 
@@ -219,7 +223,7 @@ namespace SegmentedView.Control
         }
 
         public static readonly BindableProperty FontSizeProperty = BindableProperty.Create(nameof(FontSize), typeof(double), typeof(SegmentedControl), Device.GetNamedSize(NamedSize.Medium, typeof(Label)));
-        [Microsoft.Maui.Controls.TypeConverterAttribute(typeof(FontSizeConverter))]
+        [TypeConverter(typeof(FontSizeConverter))]
         public double FontSize
         {
             get => (double)GetValue(FontSizeProperty);
@@ -233,6 +237,7 @@ namespace SegmentedView.Control
             set => SetValue(FontFamilyProperty, value);
         }
 
+        System.Collections.Generic.IList<SegmentedControlOption> IViewContainer<SegmentedControlOption>.Children => throw new System.NotImplementedException();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseSelectionChanged()
